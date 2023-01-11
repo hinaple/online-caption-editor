@@ -1,8 +1,8 @@
 export default class Project {
-    constructor(name, captions = [], video = null) {
+    constructor(name, captions = [], setting = {}) {
         this.name = name;
         this.captions = captions;
-        this.video = video;
+        this.setting = setting;
         
         this.sort();
     }
@@ -14,7 +14,7 @@ export default class Project {
         return JSON.stringify({
             name: this.name,
             caption: this.captions,
-            video: this.video
+            setting: this.setting
         });
     }
     sort() {

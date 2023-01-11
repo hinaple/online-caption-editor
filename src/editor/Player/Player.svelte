@@ -15,6 +15,7 @@
     export let duration = 0;
     export let volume = 0;
     export let currentCaption = null;
+    export let bigCC = false;
     let clicking = false;
 
     export const controller = {
@@ -26,6 +27,7 @@
 
     let prevTS = 0;
     let player;
+    let updateTimeLine;
 
     const evts = [];
     onMount(() => {
@@ -46,6 +48,7 @@
         evts.forEach(currentEvt => {
             KeyEvents.removeEvent(currentEvt);
         });
+        window.cancelAnimationFrame(animationId);
     })
     function toggle() {
         if(!player) return;
@@ -64,6 +67,7 @@
         if(target < 0) target = 0;
         else if(target > duration) target = duration;
         player.seekTo(target, seekahead);
+        timestamp = target * 1000;
     }
     function setVol(evt) {
         if(!player) return;
@@ -72,6 +76,8 @@
     function onVideoMount() {
         duration = player.getDuration();
         volume = player.getVolume();
+        updateTimeLine();
+        dispatch("vidMount")
     }
     function onPlay() {
         playing = true;
@@ -105,8 +111,9 @@
         timestamp = player.getCurrentTime() * 1000;
     }
 
+    let animationId;
     let refresh = 5000;
-    window.requestAnimationFrame(updateTimestamp);
+    animationId = window.requestAnimationFrame(updateTimestamp);
     function updateTimestamp(ts) {
         const currentTS = ts - prevTS;
         if(playing && !clicking && !bufferring) {
@@ -118,7 +125,7 @@
             }
         }
         prevTS = ts;
-        window.requestAnimationFrame(updateTimestamp);
+        animationId = window.requestAnimationFrame(updateTimestamp);
     }
 
     function addZero(num, deg) {
@@ -201,7 +208,7 @@
 <div class="container">
     <div class="video" on:click={toggle}>
         {#if bufferring}<Loading/>{/if}
-        <ShowCaption caption={currentCaption ?? ''} />
+        <ShowCaption caption={currentCaption ?? ''} bigCC={bigCC} />
         <div class="touch-block">
             <Youtube
                 bind:player={player}
@@ -213,7 +220,6 @@
                     rel: 0,
                     modestbranding: 1,
                     enablejsapi: 1,
-                    origin: "preview.fainthit.com",
                     showinfo: 0
                 }}
                 on:ready={onVideoMount}
@@ -228,7 +234,8 @@
         </div>
         <Timeline
             bind:timestamp={timestamp}
-            bind:clicking = {clicking}
+            bind:clicking={clicking}
+            bind:updateLine={updateTimeLine}
             duration={duration}
             goto={goto}
         />

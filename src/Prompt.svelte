@@ -6,11 +6,14 @@
     export let title;
     export let value;
     export let placeholder = '';
+    export let type = "prompt";
 
     let valueInput;
     onMount(() => {
-        valueInput.focus();
-        if(value.length) valueInput.setSelectionRange(0, value.length);
+        if(type === "prompt") {
+            valueInput.focus();
+            if(value.length) valueInput.setSelectionRange(0, value.length);
+        }
     });
 
     function confirm() {
@@ -96,12 +99,14 @@
         <span class="title">
             {title}
         </span>
-        <input class="value"
-            bind:value={value}
-            placeholder={placeholder}
-            on:keydown={onInput}
-            bind:this={valueInput}
-        />
+        {#if type === "prompt"}
+            <input class="value"
+                bind:value={value}
+                placeholder={placeholder}
+                on:keydown={onInput}
+                bind:this={valueInput}
+            />
+        {/if}
         <div class="buttons">
             <button class="cancel" on:click={cancel}>cancel</button>
             <button class="confirm" on:click={confirm}>confirm</button>

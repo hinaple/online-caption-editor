@@ -27,6 +27,7 @@ export default class Time {
     }
     
     _update() {
+        if(this.time === undefined) return;
         this.ms = this.time % 1000;
         this.second = Math.floor(this.time / 1000) % 60;
         this.minute = Math.floor(this.time / (1000 * 60)) % 60;

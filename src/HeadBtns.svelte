@@ -2,6 +2,7 @@
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
     import { outClick } from "./lib/outclick";
+    import { call } from "./lib/headerEvent";
 
     const headButtons = [
         {
@@ -17,19 +18,19 @@
             child: null,
             opening: false
         },
-        {
-            name: "edit",
-            btns: [
-                [ "Undo", "undo" ],
-                [ "Redo", "redo" ],
-                "hr",
-                [ "Copy", "copy" ],
-                [ "Cut", "cut" ],
-                [ "Paste", "paste" ],
-            ],
-            child: null,
-            opening: false
-        },
+        // {
+        //     name: "edit",
+        //     btns: [
+        //         [ "Undo", "undo" ],
+        //         [ "Redo", "redo" ],
+        //         "hr",
+        //         [ "Copy", "copy" ],
+        //         [ "Cut", "cut" ],
+        //         [ "Paste", "paste" ],
+        //     ],
+        //     child: null,
+        //     opening: false
+        // },
         {
             name: "view",
             btns: [
@@ -55,15 +56,13 @@
             return;
         }
         headButtons[menu].opening = true;
-        headButtons[menu].child.style.transform = "none";
     }
     function close(menu) {
         if(!headButtons[menu].opening) return;
         headButtons[menu].opening = false;
-        headButtons[menu].child.style.transform = "scaleY(0)";
     }
     function click(menu) {
-        dispatch(menu);
+        call(menu);
     }
 </script>
 
@@ -101,8 +100,15 @@
         font-size: 18px;
         margin-left: -40px;
         transform: scaleY(0);
+        transform-origin: top;
         transition: transform 0.2s 0s ease;
         cursor: auto;
+        z-index: 3;
+        pointer-events: none;
+    }
+    .child-buttons.opened {
+        transform: none;
+        pointer-events: all;
     }
     .child-button {
         position: relative;
@@ -136,12 +142,18 @@
             on:click|self={() => { open(index) }}
         >
             { menu.name }
-            <div class="child-buttons" bind:this={menu.child}>
+            <div class="child-buttons" class:opened={menu.opening}>
                 {#each menu.btns as btn}
                     {#if typeof btn === "string"}
                         <hr>
                     {:else}
-                        <div class="child-button" on:click={() => { click(btn[1]) }}>{btn[0]}</div>
+                        <div
+                            class="child-button"
+                            on:click={() => {
+                                click(btn[1]);
+                                close(index);
+                            }}
+                        >{btn[0]}</div>
                     {/if}
                 {/each}
             </div>

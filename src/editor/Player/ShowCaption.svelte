@@ -1,11 +1,11 @@
 <script>
     export let caption = "";
+    export let bigCC = false;
 </script>
 
 <style>
     .caption {
         padding: 5px;
-        background-color: #141124a2;
         color: #fff;
         font-weight: 400;
         font-size: 15px;
@@ -13,24 +13,31 @@
         left: 50%;
         transform: translateX(-50%);
         bottom: 30px;
-        border-radius: 5px;
         user-select: none;
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: fit-content;
+        width: 100%;
     }
     .line {
+        max-width: 90%;
         text-align: center;
+        background-color: #141124be;
+        border-radius: 5px;
+        padding: 1px 8px 1px 8px;
+        box-sizing: border-box;
+    }
+    .line.big {
+        font-size: 25px;
     }
 </style>
 
 {#if caption}
     <div class="caption">
-        {#each caption.split("\n") as line}
-            <span class="line">
+        {#each caption.split("\n") as line, index}
+            <div class="line" class:big={bigCC} class:top={index === 0}>
                 {line}
-            </span>
+            </div>
         {/each}
     </div>
 {/if}

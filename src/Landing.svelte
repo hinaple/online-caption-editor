@@ -64,6 +64,7 @@
         align-items: center;
         justify-content: center;
         animation: fade-shrink 0.6s 1.3s ease forwards;
+        pointer-events: none;
     }
     .frame.second {
         display: flex;

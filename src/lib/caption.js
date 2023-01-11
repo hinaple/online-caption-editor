@@ -1,13 +1,16 @@
 import Time from "./time";
 
 export default class Caption {
-    constructor(content = '', startTime = null, endTime = null) {
+    constructor(content = '', startTime = 0, endTime = 0) {
         this.content = content;
         if(typeof startTime === "string") startTime = Time.parse(startTime);
         if(typeof endTime === "string") endTime = Time.parse(endTime);
         this.startTime = new Time(startTime);
         this.endTime = new Time(endTime);
         this.key = Symbol();
+        this.old = false;
+        this.deleted = false;
+        this.el = null;
     }
     static parse(str) {
         let splitted = str.split('\n');
@@ -35,6 +38,12 @@ export default class Caption {
     }
     addEnd(ms) {
         this.endTime.add(ms);
+    }
+    getOld() {
+        this.old = true;
+    }
+    setDeleted() {
+        this.deleted = true;
     }
     shift(ms) {
         this.addEnd(ms);

@@ -1,7 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
-    import { fade } from "svelte/transition";
 
     function onClick() {
         dispatch("click");
@@ -41,6 +40,6 @@
     }
 </style>
 
-<div class="adder" on:click={onClick} in:fade={{ duration: 200 }}>
-    <div class="show-plus">+</div>
+<div class="adder" >
+    <div class="show-plus" on:click={onClick}>+</div>
 </div>

@@ -3,7 +3,7 @@
 </script>
 
 <script>
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher, onMount, onDestroy } from "svelte";
     const dispatch = createEventDispatcher();
 
     export let videoId = '';
@@ -49,6 +49,9 @@
             createPlayer(videoId); // if the YT Script is ready, we can create our player
         }
     });
+    onDestroy(() => {
+        player.destroy();
+    })
     function isMyScriptLoaded(url = "") {
         var scripts = document.getElementsByTagName("script");
         for (var i = scripts.length; i--; ) {

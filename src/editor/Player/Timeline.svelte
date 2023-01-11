@@ -11,15 +11,15 @@
     let line;
     let length;
     let linePos;
-    onMount(() => {
-        updateLine();
-    });
 
-    function updateLine() {
+    export const updateLine = () => {
         const lineBox = line.getBoundingClientRect();
         length = lineBox.width - 20;
         linePos = lineBox.left + 5;
     }
+    onMount(() => {
+        updateLine();
+    });
 
     function getMousePos(evt) { //mouse position relative to timeline
         let mousePos = evt.clientX - linePos;
@@ -58,9 +58,9 @@
     }
     $: if(handle && !clicking) moveHandle(timestamp);
 
-    function resize() {
-        updateLine();
-    }
+    // function resize() {
+    //     updateLine();
+    // }
 </script>
 
 <style>
@@ -95,7 +95,7 @@
     }
 </style>
 
-<svelte:body on:mousemove={mouseMove} on:mouseup={mouseUp} on:resize={resize}/>
+<svelte:body on:mousemove={mouseMove} on:mouseup={mouseUp}/>
 
 <div class="timeline">
     <div class="line" bind:this={line} on:mousedown={mouseDown}>

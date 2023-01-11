@@ -13,7 +13,7 @@
         left: 50%;
         transform: translateX(-50%);
         background-color: #ffffff11;
-        z-index: 2;
+        z-index: 3;
         display: flex;
         flex-direction: row;
         align-items: center;
